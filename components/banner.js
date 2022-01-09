@@ -1,5 +1,6 @@
 import styles from "../styles/Banner.module.css";
 
+
 const Banner = (props) => {
   return (
     <div className={styles.container}>
