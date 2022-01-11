@@ -5,7 +5,16 @@ import Banner from "../components/banner";
 import Card from "../components/card";
 import coffeeStores from "../data/coffee-stores.json";
 
-export default function Home() {
+export async function getStaticProps(context) {
+  return {
+    props: {
+      coffeeStores,
+    }
+  }
+}
+
+export default function Home(props) {
+  console.log("props:",props)
   const handleOnBannerBtnClick = () => {
     console.log("Hi banner button");
   };
@@ -28,7 +37,8 @@ export default function Home() {
         </div>
 
         <div className={styles.cardLayout}>
-          {coffeeStores.map(coffeeStore => (<Card
+          {props.coffeeStores.map(coffeeStore => (<Card
+            key={coffeeStore.id}
             name={coffeeStore.name}
             imgUrl={coffeeStore.imgUrl}
             href={`/coffee-store/${coffeeStore.id}`}
