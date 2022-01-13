@@ -17,8 +17,15 @@ export async function getStaticProps(staticProps) {
 }
 
 export function getStaticPaths() {
+  const paths = coffeeStoresData.map((coffeeStore) => {
+    return {
+      params: {
+        id: coffeeStore.id.toString()
+      }
+    }
+  })
   return {
-    paths: [{ params: { id: "0" } }, { params: { id: "1" } }],
+    paths,
     fallback: true,
   };
 }
@@ -30,19 +37,22 @@ const CoffeeStore = (props) => {
     return <div>Loading...</div>
   }
 
+  const {address, name, neighbourhood,imgUrl} = props.coffeeStore;
+
   console.log("props: ",props);
 
   return (
     <div>
       <Head>
-        <title>{router.query.id}</title>
+        <title>{name}</title>
+        <link rel="icon" href={imgUrl} />
       </Head>
-      Coffee Store Page {router.query.id}
       <Link href="/">
         <a>Back to Home</a>
       </Link>
-      <p>{props.coffeeStore.address}</p>
-      <p>{props.coffeeStore.name}</p>
+      <p>{address}</p>
+      <p>{name}</p>
+      <p>{neighbourhood}</p>
     </div>
   );
 };
