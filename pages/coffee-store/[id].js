@@ -8,6 +8,10 @@ import styles from "../../styles/coffee-store.module.css";
 import cls from "classnames";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
+import { StoreContext } from "../../store/store-context";
+import { isEmpty } from "../../utils";
+import { useContext, useEffect, useState } from "react";
+
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
 
@@ -46,7 +50,28 @@ const CoffeeStore = (props) => {
     return <div>Loading...</div>;
   }
 
-  const { address, neighbourhood,  name, imgUrl } = props.coffeeStore;
+  const id = router.query.id;
+  const [coffeeStore, setCoffeeStore] = useState(props.coffeeStore);
+
+  const {state: {coffeeStores}} = useContext(StoreContext);
+
+  useEffect(() => {
+    if(isEmpty(props.coffeeStore)) {
+      if(coffeeStores.length > 0) {
+        const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
+          return coffeeStore.id.toString() === id; //dynamic id
+        });
+
+        if (coffeeStoreFromContext) {
+          setCoffeeStore(coffeeStoreFromContext);
+
+        }
+      }
+    } 
+
+  }, [id, props.coffeeStore, props])
+
+  const { address, neighbourhood,  name, imgUrl } = coffeeStore;
 
   const handleUpvoteButton = () => {
     console.log("Up vote!!");
