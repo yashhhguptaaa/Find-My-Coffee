@@ -9,16 +9,16 @@ import cls from "classnames";
 import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
 export async function getStaticProps(staticProps) {
-  console.log("staticProps:", staticProps);
   const params = staticProps.params;
-  console.log("params:", params);
 
   const coffeeStores = await fetchCoffeeStores();
+
+  const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+    return coffeeStore.id === params.id; //dynamic id
+  })
   return {
     props: {
-      coffeeStore: coffeeStores.find((coffeeStore) => {
-        return coffeeStore.id === params.id; //dynamic id
-      }),
+      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
     },
   };
 }
@@ -83,10 +83,10 @@ const CoffeeStore = (props) => {
         </div>
 
         <div className={cls("glass", styles.col2)}>
-          <div className={styles.iconWrapper}>
+          {address && (<div className={styles.iconWrapper}>
             <Image src="/static/icons/places.svg" width="24" height="24" />
             <p className={styles.text}>{address}</p>
-          </div>
+          </div>)}
           {neighbourhood && (
             <div className={styles.iconWrapper}>
               <Image src="/static/icons/nearMe.svg" width="24" height="24" />
