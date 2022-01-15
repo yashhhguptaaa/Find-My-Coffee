@@ -34,7 +34,7 @@ export default function Home(props) {
     console.log({ latLong });
     if (latLong) {
       try {
-        const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
+        // const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
         dispatch({
           type: ACTION_TYPES.SET_COFFEE_STORES,
           payload: { coffeeStores: fetchedCoffeeStores },
