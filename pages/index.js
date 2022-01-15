@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
@@ -24,6 +25,17 @@ export default function Home(props) {
   const {handleTrackLocation, latlong, locationErrorMsg, isFindingLocation} = useTrackLocation();
 
   console.log({latlong, locationErrorMsg, handleTrackLocation})
+
+  useEffect(async() => {
+    if(latlong) {
+      try {
+        const fetchedCoffeeStores = await fetchCoffeeStores(latlong);
+        console.log({fetchedCoffeeStores})
+      } catch (error) {
+        console.log({error})
+      }
+    }
+  }, [latlong])
 
   const handleOnBannerBtnClick = () => {
     console.log("Hi banner button");
