@@ -26,12 +26,31 @@ const createCoffeeStore = async (req, res) => {
         res.json(records);
       } else {
         // create a record
-        res.json({ message: "Create a record" });
+
+        const createRecords = await table.create([
+          {
+            fields: {
+              id: "1",
+              name: "My favourite Coffee Store",
+              address: "My address",
+              neighbourhood: "Some Neighbourhood",
+              voting: 200,
+              imgUrl: "http://localhost:3000",
+            },
+          },
+        ]);
+
+        const records = createRecords.map((record) => {
+          return {
+            ...record.fields,
+          };
+        });
+
+        res.json({ message: "Created a record", records });
       }
     } catch (error) {
-
       console.log("Error finding store", error);
-      res.status(500).json({message: "Error finding store",error})
+      res.status(500).json({ message: "Error finding store", error });
     }
   }
 };
