@@ -13,6 +13,6 @@ const getCoffeeStoresByLocation = async (req, res) => {
         console.error("There is error:",error);
         res.status(500).json({message: 'Oh no! Something went wrong'})
     }
-}
+} 
 
 export default getCoffeeStoresByLocation;
