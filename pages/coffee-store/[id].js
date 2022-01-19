@@ -19,7 +19,7 @@ export async function getStaticProps(staticProps) {
 
   const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
     return coffeeStore.id === params.id; //dynamic id
-  })
+  });
   return {
     props: {
       coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
@@ -53,25 +53,52 @@ const CoffeeStore = (props) => {
   const id = router.query.id;
   const [coffeeStore, setCoffeeStore] = useState(props.coffeeStore);
 
-  const {state: {coffeeStores}} = useContext(StoreContext);
+  const {
+    state: { coffeeStores },
+  } = useContext(StoreContext);
+
+  const handleCreateCoffeeStore = async (coffeeStore) => {
+    try {
+      const { id, name, voting, imgUrl, neighbourhood, address } = coffeeStore;
+
+      const response = await fetch("/api/createCoffeeStore", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+          name,
+          voting :0,
+          imgUrl,
+          neighbourhood: neighbourhood || "",
+          address: address || "",
+        }),
+      });
+
+      const dbCoffeeStore = await response.json();
+      console.log({ dbCoffeeStore });
+    } catch (error) {
+      console.error("Error creating coffee store", error);
+    }
+  };
 
   useEffect(() => {
-    if(isEmpty(props.coffeeStore)) {
-      if(coffeeStores.length > 0) {
+    if (isEmpty(props.coffeeStore)) {
+      if (coffeeStores.length > 0) {
         const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
           return coffeeStore.id.toString() === id; //dynamic id
         });
 
         if (coffeeStoreFromContext) {
           setCoffeeStore(coffeeStoreFromContext);
-
+          handleCreateCoffeeStore(coffeeStoreFromContext);
         }
       }
-    } 
+    }
+  }, [id]);
 
-  }, [id, props.coffeeStore, props])
-
-  const { address, neighbourhood,  name, imgUrl } = coffeeStore;
+  const { address, neighbourhood, name, imgUrl } = coffeeStore;
 
   const handleUpvoteButton = () => {
     console.log("Up vote!!");
@@ -108,10 +135,12 @@ const CoffeeStore = (props) => {
         </div>
 
         <div className={cls("glass", styles.col2)}>
-          {address && (<div className={styles.iconWrapper}>
-            <Image src="/static/icons/places.svg" width="24" height="24" />
-            <p className={styles.text}>{address}</p>
-          </div>)}
+          {address && (
+            <div className={styles.iconWrapper}>
+              <Image src="/static/icons/places.svg" width="24" height="24" />
+              <p className={styles.text}>{address}</p>
+            </div>
+          )}
           {neighbourhood && (
             <div className={styles.iconWrapper}>
               <Image src="/static/icons/nearMe.svg" width="24" height="24" />
