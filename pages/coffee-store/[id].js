@@ -95,8 +95,10 @@ const CoffeeStore = (props) => {
           handleCreateCoffeeStore(coffeeStoreFromContext);
         }
       }
+    } else {
+      handleCreateCoffeeStore(props.coffeeStore);
     }
-  }, [id]);
+  }, [id, props, props.coffeeStore]);
 
   const { address, neighbourhood, name, imgUrl } = coffeeStore;
 
