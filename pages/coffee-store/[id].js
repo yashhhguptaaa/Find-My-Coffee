@@ -46,27 +46,35 @@ export async function getStaticPaths() {
 }
 
 const CoffeeStore = (initialProps) => {
+
   const router = useRouter();
-  if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
+
   const id = router.query.id;
 
+  const [LoadingCondition, setLoadingCondition] = useState(router.isFallback)
+
+  
+
   const [votingCount, setVotingCount] = useState(0);
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
 
-  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
-
-
-  
-  // const myCoffeeStore = initialProps.coffeeStore;
-
-  const [coffeeStore, setCoffeeStore] = useState("");
-  
+  const { address, name, neighbourhood, imgUrl } = coffeeStore;
 
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
+
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setCoffeeStore(data[0]);
+
+      setVotingCount(data[0].voting);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (isEmpty(initialProps.coffeeStore)) {
@@ -86,18 +94,10 @@ const CoffeeStore = (initialProps) => {
     }
   }, [id, initialProps, initialProps.coffeeStore]);
 
-  const { address, name, neighbourhood, imgUrl } = coffeeStore;
+ 
 
 
-
-
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setCoffeeStore(data[0]);
-
-      setVotingCount(data[0].voting);
-    }
-  }, [data]);
+  
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
     try {
@@ -127,7 +127,6 @@ const CoffeeStore = (initialProps) => {
       console.error("Error creating coffee store", err);
     }
   };
- 
 
   const handleUpvoteButton = async () => {
     try {
@@ -151,6 +150,9 @@ const CoffeeStore = (initialProps) => {
     }
   };
 
+  if (LoadingCondition) {
+    return <div>Loading...</div>;
+  }
   if (error) {
     return <div>Something went wrong retrieving coffee store page</div>;
   }
@@ -188,8 +190,13 @@ const CoffeeStore = (initialProps) => {
         <div className={cls("glass", styles.col2)}>
           {address && (
             <div className={styles.iconWrapper}>
-              <Image src="/static/icons/places.svg" width="24" height="24" alt={address}/>
-              
+              <Image
+                src="/static/icons/places.svg"
+                width="24"
+                height="24"
+                alt={address}
+              />
+
               <p className={styles.text}>{address}</p>
             </div>
           )}
