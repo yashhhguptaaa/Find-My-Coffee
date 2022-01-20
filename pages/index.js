@@ -28,20 +28,23 @@ export default function Home(props) {
 
   const [coffeeStoresError, setCoffeeStoresError] = useState(null);
 
-  
-  useEffect(async () => {
-   
+  useEffect(() => {
     if (latLong) {
       try {
-        const response = await fetch(`/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=30`);
+        async function fetchCoffeeStoreByLatlong() {
+          const response = await fetch(
+            `/api/getCoffeeStoresByLocation?latLong=${latLong}&limit=30`
+          );
 
-        const fetchedCoffeeStores = await  response.json()
+          const fetchedCoffeeStores = await response.json();
 
-        dispatch({
-          type: ACTION_TYPES.SET_COFFEE_STORES,
-          payload: { coffeeStores: fetchedCoffeeStores },
-        });
-        setCoffeeStoresError("");
+          dispatch({
+            type: ACTION_TYPES.SET_COFFEE_STORES,
+            payload: { coffeeStores: fetchedCoffeeStores },
+          });
+          setCoffeeStoresError("");
+        }
+        fetchCoffeeStoreByLatlong();
       } catch (error) {
         setCoffeeStoresError(error.message);
       }

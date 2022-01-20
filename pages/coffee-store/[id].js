@@ -1,3 +1,4 @@
+import { useState, useContext, useEffect  } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
@@ -12,7 +13,7 @@ import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
 import { StoreContext } from "../../store/store-context";
 import { isEmpty } from "../../utils";
-import { useContext, useEffect, useState } from "react";
+
 
 export async function getStaticProps(staticProps) {
   const params = staticProps.params;
@@ -181,17 +182,20 @@ const CoffeeStore = (initialProps) => {
           {address && (
             <div className={styles.iconWrapper}>
               <Image src="/static/icons/places.svg" width="24" height="24" />
+              alt={address}
               <p className={styles.text}>{address}</p>
             </div>
           )}
           {neighbourhood && (
             <div className={styles.iconWrapper}>
-              <Image src="/static/icons/nearMe.svg" width="24" height="24" />
+              <Image src="/static/icons/nearMe.svg" width="24" height="24" 
+              alt={neighbourhood}
+              />
               <p className={styles.text}>{neighbourhood}</p>
             </div>
           )}
           <div className={styles.iconWrapper}>
-            <Image src="/static/icons/star.svg" width="24" height="24" />
+            <Image src="/static/icons/star.svg" width="24" height="24" alt="Votes"/>
             <p className={styles.text}>{votingCount}</p>
           </div>
 
