@@ -82,7 +82,7 @@ export default function Home(props) {
         )}
 
         <div className={styles.heroImage}>
-          <Image src="/static/hero-image.png" width={700} height={400} />
+          <Image src="/static/hero-image.png" width={700} height={400} alt="Coffee Connosiur" />
         </div>
 
         {coffeeStores.length > 0 && (
