@@ -55,10 +55,45 @@ const CoffeeStore = (initialProps) => {
   const myCoffeeStore = initialProps.coffeeStore;
 
   const [coffeeStore, setCoffeeStore] = useState(myCoffeeStore);
+  const { address, name, neighbourhood, imgUrl } = coffeeStore;
 
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
+
+  useEffect(() => {
+    if (isEmpty(initialProps.coffeeStore)) {
+      if (coffeeStores.length > 0) {
+        const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
+          return coffeeStore.id.toString() === id; //dynamic id
+        });
+
+        if (coffeeStoreFromContext) {
+          setCoffeeStore(coffeeStoreFromContext);
+          handleCreateCoffeeStore(coffeeStoreFromContext);
+        }
+      }
+    } else {
+      // SSG
+      handleCreateCoffeeStore(initialProps.coffeeStore);
+    }
+  }, [id, initialProps, initialProps.coffeeStore]);
+
+  
+
+
+  const [votingCount, setVotingCount] = useState(0);
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setCoffeeStore(data[0]);
+
+      setVotingCount(data[0].voting);
+    }
+  }, [data]);
 
   const handleCreateCoffeeStore = async (coffeeStore) => {
     try {
@@ -88,39 +123,7 @@ const CoffeeStore = (initialProps) => {
       console.error("Error creating coffee store", err);
     }
   };
-
-  useEffect(() => {
-    if (isEmpty(initialProps.coffeeStore)) {
-      if (coffeeStores.length > 0) {
-        const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
-          return coffeeStore.id.toString() === id; //dynamic id
-        });
-
-        if (coffeeStoreFromContext) {
-          setCoffeeStore(coffeeStoreFromContext);
-          handleCreateCoffeeStore(coffeeStoreFromContext);
-        }
-      }
-    } else {
-      // SSG
-      handleCreateCoffeeStore(initialProps.coffeeStore);
-    }
-  }, [id, initialProps, initialProps.coffeeStore]);
-
-  const { address, name, neighbourhood, imgUrl } = coffeeStore;
-
-  const [votingCount, setVotingCount] = useState(0);
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
-  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`, fetcher);
-
-  useEffect(() => {
-    if (data && data.length > 0) {
-      setCoffeeStore(data[0]);
-
-      setVotingCount(data[0].voting);
-    }
-  }, [data]);
+ 
 
   const handleUpvoteButton = async () => {
     try {
