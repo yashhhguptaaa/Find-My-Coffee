@@ -18,6 +18,7 @@ export async function getStaticProps(staticProps) {
   const params = staticProps.params;
 
   const coffeeStores = await fetchCoffeeStores();
+ 
 
   const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
     return coffeeStore.id === params.id; //dynamic id
@@ -45,26 +46,23 @@ export async function getStaticPaths() {
   };
 }
 
-const CoffeeStore = (props) => {
+const CoffeeStore = (initialProps) => {
   const router = useRouter();
-
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
   const id = router.query.id;
-  const [coffeeStore, setCoffeeStore] = useState(props.coffeeStore);
+
+  const [coffeeStore, setCoffeeStore] = useState(initialProps.coffeeStore);
 
   const {
     state: { coffeeStores },
   } = useContext(StoreContext);
 
-  
-
   const handleCreateCoffeeStore = async (coffeeStore) => {
     try {
       const { id, name, voting, imgUrl, neighbourhood, address } = coffeeStore;
-
       const response = await fetch("/api/createCoffeeStore", {
         method: "POST",
         headers: {
@@ -73,68 +71,87 @@ const CoffeeStore = (props) => {
         body: JSON.stringify({
           id,
           name,
-          voting :0,
+          voting: 0,
           imgUrl,
-          neighbourhood: neighbourhood || "",
+          neighbourhood: Array.isArray(neighbourhood) ? neighbourhood.join(',') : neighbourhood,
           address: address || "",
         }),
       });
 
       const dbCoffeeStore = await response.json();
-      console.log({ dbCoffeeStore });
-    } catch (error) {
-      console.error("Error creating coffee store", error);
+     
+      setCoffeeStore(dbCoffeeStore[0])
+      setVotingCount(dbCoffeeStore[0].voting)
+    } catch (err) {
+      console.error("Error creating coffee store", err);
     }
   };
 
   useEffect(() => {
-    if (isEmpty(props.coffeeStore)) {
+    if (isEmpty(initialProps.coffeeStore)) {
       if (coffeeStores.length > 0) {
         const coffeeStoreFromContext = coffeeStores.find((coffeeStore) => {
           return coffeeStore.id.toString() === id; //dynamic id
         });
 
         if (coffeeStoreFromContext) {
+         
           setCoffeeStore(coffeeStoreFromContext);
           handleCreateCoffeeStore(coffeeStoreFromContext);
         }
       }
     } else {
-      handleCreateCoffeeStore(props.coffeeStore);
+      // SSG
+      handleCreateCoffeeStore(initialProps.coffeeStore);
     }
-  }, [id, props, props.coffeeStore]);
+  }, [id, initialProps, initialProps.coffeeStore]);
 
-  const { address, neighbourhood, name, imgUrl } = coffeeStore;
+  const { address, name, neighbourhood, imgUrl } = coffeeStore;
 
-  const [votingCount, setVotingCount] = useState(0)
+  const [votingCount, setVotingCount] = useState(0);
 
-  const {data, error} = useSWR(`/api/getCoffeeStorebyId?${id}`);
- 
+  const { data, error } = useSWR(`/api/getCoffeeStoreById?id=${id}`);
+
+
   useEffect(() => {
-    if(data && data.length > 0) {
+    if (data && data.length > 0) {
       setCoffeeStore(data[0]);
 
-      setVotingCount(data[0].voting)
+      setVotingCount(data[0].voting);
     }
-  }, [data])
+  }, [data]);
 
-  const handleUpvoteButton = () => { 
-    console.log("Up vote!!");
-    let count = votingCount + 1;
-    setVotingCount(count);
+  const handleUpvoteButton = async () => {
+    try {
+      const response = await fetch("/api/favouriteCoffeeStoreById", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+        }),
+      });
+
+      const dbCoffeeStore = await response.json();
+
+      if (dbCoffeeStore && dbCoffeeStore.length > 0) {
+        setVotingCount(dbCoffeeStore[0].voting);
+      }
+    } catch (err) {
+      console.error("Error upvoting the coffee store", err);
+    }
   };
 
-  if(error) {
-    return <div>
-      Something went wrong retrieving coffee store page
-    </div>
+  if (error) {
+    return <div>Something went wrong retrieving coffee store page</div>;
   }
 
   return (
     <div className={styles.layout}>
       <Head>
         <title>{name}</title>
-        <link rel="icon" href={imgUrl} />
+        <link rel="icon" href="/coffeeIcon.png" />
       </Head>
       <div className={styles.container}>
         <div className={styles.col1}>
