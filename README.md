@@ -1,35 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Coffee Connoisseur
+Coffee Connoisseur is a coffee-shop finder application. Here, Users can find coffee shops near them. Users can share their favourite cafes and also up vote the coffee cafes.
+
+![Spacestagram!](/public/static/readmeAssets/landingPage.PNG)
+
+### [Deployed Link](https://find-my-coffee-shop.vercel.app/)
+
 
 ## Getting Started
 
-First, run the development server:
+Coffee Connoisseur is a coffee-shop finder application.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Technologies Used
+- Next.js
+- Airtable
+- Unsplash API
+- Four Sqaure API
+- CSS
+## Features Implemented
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Glass Effect
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Glass Effect on the card. When the user hover on card, the glass effect is shown.                   
+![Glass Effect!](/public/static/readmeAssets/glassEffect.gif)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+### View Stores Nearly Button
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+This button is responsible to fetch the latitude and longitude of your location using "navigator.geolocation" which is embeded in web API.                                        
 
-## Learn More
+### Up Vote Button
 
-To learn more about Next.js, take a look at the following resources:
+This button is responsible to increase the votes of that particular coffee-cafe.
+![Up Vote!](/public/static/readmeAssets/upVote.gif)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 # Find-My-Coffee
+
+
