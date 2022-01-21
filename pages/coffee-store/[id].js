@@ -156,6 +156,7 @@ const CoffeeStore = (initialProps) => {
     <div className={styles.layout}>
       <Head>
         <title>{coffeeStore.name}</title>
+        <meta name="description" content= "This is the Coffee shop near you. They have some amazing coffee collection. You can drink your brew here." />
         <link rel="icon" href="/coffeeIcon.png" />
       </Head>
       <div className={styles.container}>
