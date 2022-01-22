@@ -8,7 +8,7 @@ Coffee Connoisseur is a coffee-shop finder application. Here, Users can find cof
 ![Coffee Connoisseur!](/public/static/readmeAssets/landingPage.PNG)
 
 <div align="center">
-    <a href="https://find-my-coffee-shop.vercel.app/" target="_blank"><h1>🔗Deployed Link</h1></a>
+    <button onClick={() => window.href="https://find-my-coffee-shop.vercel.app/"} ><h1>🔗Deployed Link</h1></button>
     <h1>Coffee Connoisseur</h1>
 
 </div>
