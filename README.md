@@ -8,7 +8,7 @@ Coffee Connoisseur is a coffee-shop finder application. Here, Users can find cof
 ![Coffee Connoisseur!](/public/static/readmeAssets/landingPage.PNG)
 
 <div align="center">
-  ### [Deployed Link](https://find-my-coffee-shop.vercel.app/)
+   [Deployed Link](https://find-my-coffee-shop.vercel.app/)
 </div>
 
 
@@ -36,7 +36,10 @@ This button is responsible to fetch the latitude and longitude of your location 
 ### ✅Up Vote Button
 
 This button is responsible to increase the votes of that particular coffee-cafe.
-![Up Vote!](/public/static/readmeAssets/upVote.gif)
+<div align="center"> 
+    ![Up Vote!](/public/static/readmeAssets/upVote.gif)
+</div>
+
 
 <div align="center">
     <h1>Find-My-Coffee-Cafe</h1>
