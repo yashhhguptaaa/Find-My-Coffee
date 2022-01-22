@@ -40,8 +40,6 @@ This button is responsible to increase the votes of that particular coffee-cafe.
     <img src="/public/static/readmeAssets/upVote.gif" alt="Voting Button" />
 </p>
 
-![Up Vote!](/public/static/readmeAssets/upVote.gif)
-
 
 <div align="center">
     <h1>Find-My-Coffee-Cafe</h1>
